@@ -1,0 +1,18 @@
+Build.PL
+Changes
+lib/CGI/Application/Plugin/FormState.pm
+MANIFEST			This list of files
+MANIFEST.SKIP
+META.yml
+misc/dist
+misc/makedocs.pl
+misc/module-starter-opts.txt
+misc/style.css
+README
+t/00.load.t
+t/01-basic.t
+t/02-expires.t
+t/pod-coverage.t
+t/pod.t
+t/tmpl/basic.html
+TODO
