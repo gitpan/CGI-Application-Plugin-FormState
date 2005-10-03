@@ -11,6 +11,8 @@ my $builder = Module::Build->new(
         'Test::More'                        => 0,
         'CGI::Session'                      => 4.0,
         'CGI::Application::Plugin::Session' => 0.09,
+        'CGI::Application'                  => 4.0,
+        'CGI'                               => 2.37,
     },
     add_to_cleanup      => [ 'CGI-Application-Plugin-FormState-*' ],
 );

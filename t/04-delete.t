@@ -85,58 +85,19 @@ my $Storage_Hash;
         is($self->form_state->name, 'cap_form_state',    'name');
 
         is($output, "$Storage_Name:$Storage_Hash", 'form_state_id added to output');
+
+        $self->form_state->delete;
+
+        is($self->session->param('foo'), 42, '[webapp1] other session data still there');
+
+        ok(!exists $self->session->dataref->{$session_key}, 'storage has been removed');
+
     }
 }
 
-{
-
-    package WebApp2;
-    use CGI::Application;
-
-    use vars qw(@ISA);
-    BEGIN { @ISA = qw(CGI::Application); }
-
-    use CGI::Application::Plugin::Session;
-    use CGI::Application::Plugin::FormState;
-
-    use Test::More;
-
-    sub setup {
-        my $self = shift;
-
-        $self->run_modes(['start']);
-
-        # init session and verify that it's got content
-        $self->session_config(
-            CGI_SESSION_OPTIONS => [ "driver:File", $Session_ID, { Directory => 't' } ],
-        );
-        is($self->session->param('foo'), 42, '[webapp2] previous session initialized');
-
-        $self->start_mode('start');
-        $self->run_modes([qw/start/]);
-    }
-    sub start {
-        my $self = shift;
-
-        # Retrieve some parameters
-        my @keys = sort $self->form_state->param;
-        ok(eq_array(\@keys, ['name', 'name2', 'occupation']), '[webapp2] form_state keys');
-
-        # Retrieve some parameters
-        is($self->form_state->param('name'),        'Bugs Bunny',        '[webapp2] form_state: name');
-        is($self->form_state->param('name2'),       'Wile E. Coyote',    '[webapp2] form_state: name2');
-        is($self->form_state->param('occupation'),  'Cartoon Character', '[webapp2] form_state: occupation');
-
-    }
-
-}
 
 WebApp1->new->run;
 
-my $query = CGI->new;
-$query->param($Storage_Name, $Storage_Hash);
-
-WebApp2->new(QUERY => $query)->run;
-
 unlink File::Spec->catfile('t', $CGI::Session::Driver::file::FileName);
+
 

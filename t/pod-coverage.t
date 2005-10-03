@@ -13,7 +13,7 @@ else {
 # the calling syntax of every other sub.
 pod_coverage_ok(
         "CGI::Application::Plugin::FormState",
-        { also_private => [ qr/^form_state$/ ], },
-        "CAP::FormState, POD coverage, but marking the 'form_state' sub as private",
+        { also_private => [ qr/^(form_state)|(init)$/ ], },
+        "CAP::FormState, POD coverage, but marking the 'form_state' and 'init' subs as private",
 );
 

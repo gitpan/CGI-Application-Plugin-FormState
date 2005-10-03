@@ -12,6 +12,7 @@ use File::Spec;
 $CGI::Session::Driver::file::FileName = 'session.dat';
 
 my $Session_ID;
+my $Storage_Name = 'some_storage_name';
 my $Storage_Hash;
 
 {
@@ -37,16 +38,14 @@ my $Storage_Hash;
         $Session_ID = $self->session->id;
         $self->session->param('foo', 42);
         is($self->session->param('foo'), 42, 'new session initialized');
+        $self->form_state;
 
     }
     sub start {
         my $self = shift;
 
-        $self->form_state->config('expires' => '1s');
-        my $session_key = 'form_state_cap_form_state_' . $self->form_state->id;
-        is($session_key, $self->form_state->session_key, 'session key');
-        is($self->form_state->name, 'cap_form_state',    'name');
-
+        $self->form_state->init($Storage_Name, 'expires' => '1s');
+        my $session_key = 'form_state_' . $Storage_Name . '_' . $self->form_state->id;
 
         my @keys = sort $self->form_state->param;
         ok(eq_array(\@keys, []), '[webapp2] form_state keys (1)');
@@ -97,6 +96,8 @@ my $Storage_Hash;
     sub start {
         my $self = shift;
 
+        $self->form_state->init($Storage_Name);
+
         # Retrieve some parameters
         my @keys = sort $self->form_state->param;
         ok(eq_array(\@keys, []), '[webapp2] form_state is empty');
@@ -110,7 +111,7 @@ WebApp1->new->run;
 sleep 2;
 
 my $query = CGI->new;
-$query->param('cap_form_state', $Storage_Hash);
+$query->param($Storage_Name, $Storage_Hash);
 
 WebApp2->new(QUERY => $query)->run;
 
