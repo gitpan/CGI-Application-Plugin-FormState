@@ -38,11 +38,11 @@ CGI::Application::Plugin::FormState - Store Form State without Hidden Fields
 
 =head1 VERSION
 
-Version 0.10
+Version 0.11
 
 =cut
 
-our $VERSION = '0.10';
+our $VERSION = '0.11';
 
 =head1 SYNOPSIS
 
@@ -472,7 +472,16 @@ Deletes the form_state storage from the user's session.
 
 sub delete {
     my $self = shift;
-    $self->{__CGIAPP_OBJ}->session->clear($self->{'__STORAGE_KEY'});
+
+    # No need to call $self->config and create the session key since we're
+    # just going to delete it.
+    #
+    # However, it's very important not to call session->clear without a key;
+    # if we do, we'll delete all params in the user's session!
+
+    if ($self->{'__STORAGE_KEY'}) {
+        $self->{__CGIAPP_OBJ}->session->clear($self->{'__STORAGE_KEY'});
+    }
 }
 
 
@@ -487,6 +496,10 @@ portion of the session key.
 
 sub id {
     my $self = shift;
+
+    if (!$self->{'__CONFIGURED'}) {
+        $self->config;
+    }
     $self->{'__STORAGE_HASH'};
 }
 
@@ -501,6 +514,10 @@ Defaults to C<cap_form_state>.
 
 sub name {
     my $self = shift;
+
+    if (!$self->{'__CONFIGURED'}) {
+        $self->config;
+    }
     $self->{'__STORAGE_NAME'};
 }
 
@@ -524,6 +541,10 @@ The following can be used to debug the form_state data:
 
 sub session_key {
     my $self = shift;
+
+    if (!$self->{'__CONFIGURED'}) {
+        $self->config;
+    }
     $self->{'__STORAGE_KEY'};
 }
 

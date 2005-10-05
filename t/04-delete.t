@@ -42,6 +42,10 @@ my $Storage_Hash;
     sub start {
         my $self = shift;
 
+        $self->form_state->delete;
+
+        is($self->session->param('foo'), 42, '[webapp1] other session data still there');
+
         my @keys = sort $self->form_state->param;
         ok(eq_array(\@keys, []), '[webapp2] form_state keys (1)');
 
