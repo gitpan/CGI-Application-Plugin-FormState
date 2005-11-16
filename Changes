@@ -1,5 +1,8 @@
 Revision history for CGI-Application-Plugin-FormState
 
+0.12    Nov 16, 2005
+        - added Makefile.PL compatibility to the distribution
+
 0.11    Oct 05, 2005
         - fixed a serious bug where calling 'delete' before calling
           'param' could clear all values in the user's session

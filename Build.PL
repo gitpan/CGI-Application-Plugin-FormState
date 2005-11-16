@@ -15,6 +15,7 @@ my $builder = Module::Build->new(
         'CGI'                               => 2.37,
     },
     add_to_cleanup      => [ 'CGI-Application-Plugin-FormState-*' ],
+    create_makefile_pl  => 'traditional',
 );
 
 $builder->create_build_script();

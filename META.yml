@@ -1,6 +1,6 @@
 ---
 name: CGI-Application-Plugin-FormState
-version: 0.11
+version: 0.12
 author:
   - Michael Graham <mag-perl@occamstoothbrush.com>
 abstract: Store Form State without Hidden Fields
@@ -14,5 +14,5 @@ requires:
 provides:
   CGI::Application::Plugin::FormState:
     file: lib/CGI/Application/Plugin/FormState.pm
-    version: 0.11
+    version: 0.12
 generated_by: Module::Build version 0.2611
